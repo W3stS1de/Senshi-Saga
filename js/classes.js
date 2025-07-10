@@ -355,7 +355,7 @@ class FoodDrop {
         this.sprite = null;
         this.loadSprite();
         
-        console.log(`Food drop created: ${type}, Heal: +${this.healAmount} HP, Size: ${this.width}x${this.height} (NO ROTATION)`);
+        console.log(`🍱 Food drop created: ${type}, Heal: +${this.healAmount} HP, Size: ${this.width}x${this.height} (NO ROTATION)`);
     }
     
     loadSprite() {
@@ -364,7 +364,7 @@ class FoodDrop {
             console.log(`Food sprite loaded: ${this.type}`);
         };
         this.sprite.onerror = () => {
-            console.log(`Failed to load food sprite: ${this.type}`);
+            console.log(`❌ Failed to load food sprite: ${this.type}`);
             this.sprite = null;
         };
         this.sprite.src = this.spritePath;
@@ -988,3 +988,4 @@ class EnhancedPowerSphere {
         ctx.restore();
     }
 }
+
