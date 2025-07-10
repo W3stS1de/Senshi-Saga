@@ -80,7 +80,7 @@ class ShieldAura {
 
         this.loadSprite();
         
-        console.log(`Shield aura system initialized for ${this.columns}x${this.rows} grid`);
+        console.log(` Shield aura system initialized for ${this.columns}x${this.rows} grid`);
     }
     
     // Загрузка 
@@ -102,13 +102,13 @@ class ShieldAura {
                 this.currentFrame = Math.floor(Math.random() * this.frameCount);
             }
             
-            console.log(`Shield aura sprite loaded: ${this.sprite.width}x${this.sprite.height}`);
+            console.log(` Shield aura sprite loaded: ${this.sprite.width}x${this.sprite.height}`);
             console.log(`Grid: ${this.columns}x${this.rows}, Frame size: ${this.frameWidth}x${this.frameHeight}`);
             console.log(`Total frames: ${this.frameCount}, Reading order: ${this.readingOrder}`);
         };
         
         this.sprite.onerror = () => {
-            console.log('Failed to load shield aura sprite');
+            console.log('❌ Failed to load shield aura sprite');
             this.loaded = false;
         };
         
@@ -145,7 +145,7 @@ class ShieldAura {
         this.active = true;
         this.visible = true;
         this.alpha = SHIELD_AURA_CONFIG.visual.opacity;
-        console.log('Shield aura activated');
+        console.log('🛡️ Shield aura activated');
     }
     
     // Деактивация ауры
@@ -162,7 +162,7 @@ class ShieldAura {
             if (this.alpha <= 0) {
                 this.alpha = 0;
                 this.visible = false;
-                console.log('Shield aura deactivated');
+                console.log('🛡️ Shield aura deactivated');
             }
         }
     }
@@ -286,7 +286,7 @@ class ShieldAura {
         const { row, col } = this.getFramePosition(this.currentFrame);
         const { srcX, srcY } = this.getSourceCoordinates(this.currentFrame);
         
-        console.log(`Debug Frame ${this.currentFrame}:`);
+        console.log(` Debug Frame ${this.currentFrame}:`);
         console.log(`  Grid position: row ${row}, col ${col}`);
         console.log(`  Source coords: (${srcX}, ${srcY})`);
         console.log(`  Reading order: ${this.readingOrder}`);
@@ -360,8 +360,8 @@ function drawShieldAuraBehindPlayer(ctx) {
 function debugShieldAuraGrid() {
     if (player.shieldAura) {
         player.shieldAura.debugCurrentFrame();
-        console.log(`Grid info: ${player.shieldAura.columns}x${player.shieldAura.rows}`);
-        console.log(`Frame size: ${player.shieldAura.frameWidth}x${player.shieldAura.frameHeight}`);
+        console.log(`🛡️ Grid info: ${player.shieldAura.columns}x${player.shieldAura.rows}`);
+        console.log(`📏 Frame size: ${player.shieldAura.frameWidth}x${player.shieldAura.frameHeight}`);
     }
 }
 
