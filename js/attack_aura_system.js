@@ -108,7 +108,7 @@ class AttackAura {
         };
         
         this.sprite.onerror = () => {
-            console.log('Failed to load attack aura sprite');
+            console.log('❌ Failed to load attack aura sprite');
             this.loaded = false;
         };
         
@@ -146,7 +146,7 @@ class AttackAura {
         this.active = true;
         this.visible = true;
         this.alpha = ATTACK_AURA_CONFIG.visual.opacity;
-        console.log('Attack aura activated');
+        console.log('⚔️ Attack aura activated');
     }
     
     // Деактивация ауры
@@ -164,7 +164,7 @@ class AttackAura {
             if (this.alpha <= 0) {
                 this.alpha = 0;
                 this.visible = false;
-                console.log('Attack aura deactivated');
+                console.log('⚔️ Attack aura deactivated');
             }
         }
     }
@@ -303,7 +303,7 @@ class AttackAura {
         const { row, col } = this.getFramePosition(this.currentFrame);
         const { srcX, srcY } = this.getSourceCoordinates(this.currentFrame);
         
-        console.log(`Debug Attack Frame ${this.currentFrame}:`);
+        console.log(`⚔️ Debug Attack Frame ${this.currentFrame}:`);
         console.log(`  Grid position: row ${row}, col ${col}`);
         console.log(`  Source coords: (${srcX}, ${srcY})`);
         console.log(`  Reading order: ${this.readingOrder}`);
@@ -313,9 +313,9 @@ class AttackAura {
 function initAttackAuraSystem() {
     if (typeof player !== 'undefined') {
         player.attackAura = new AttackAura(player);
-        console.log('Attack aura system integrated (grid 5x6)');
+        console.log('⚔️ Attack aura system integrated (grid 5x6)');
     } else {
-        console.log('Player not found, will retry attack aura init later');
+        console.log('⚠️ Player not found, will retry attack aura init later');
     }
 }
 
@@ -456,7 +456,8 @@ if (typeof window !== 'undefined') {
     window.debugAttackAuraGrid = debugAttackAuraGrid;
     
     if (typeof player !== 'undefined' && !player.attackAura) {
-        console.log('Auto-initializing attack aura system...');
+        console.log('🔄 Auto-initializing attack aura system...');
         initAttackAuraSystem();
     }
 }
+
