@@ -438,7 +438,7 @@ function drawStartScreen() {
 }
 
 async function loadAllAssets() {
-    console.log('🔄 Loading HERO + MARTIAL HERO assets with food system...');
+    console.log('Loading HERO + MARTIAL HERO assets with food system...');
     
     try {
         loadBackgroundSilently();
@@ -451,7 +451,7 @@ async function loadAllAssets() {
         loadImageOptionally(ASSETS.player.run_left_1, IMAGES.player, 'run_left_1');
         loadImageOptionally(ASSETS.player.run_left_2, IMAGES.player, 'run_left_2');
         
-        console.log(' Loading Hero ');
+        console.log('Loading Hero');
         loadSpritesheetWithLogging(ASSETS.enemies.hero.run, IMAGES.enemies.hero, 'run', 'Hero');
         loadSpritesheetWithLogging(ASSETS.enemies.hero.attack, IMAGES.enemies.hero, 'attack', 'Hero');
         loadSpritesheetWithLogging(ASSETS.enemies.hero.run_left, IMAGES.enemies.hero, 'run_left', 'Hero');
@@ -459,7 +459,7 @@ async function loadAllAssets() {
         loadSpritesheetWithLogging(ASSETS.enemies.hero.attack_left, IMAGES.enemies.hero, 'attack_left', 'Hero');
         loadSpritesheetWithLogging(ASSETS.enemies.hero.attack_right, IMAGES.enemies.hero, 'attack_right', 'Hero');
         
-        console.log('Loading Martial Hero .');
+        console.log('Loading Martial Hero');
         loadSpritesheetWithLogging(ASSETS.enemies.martialHero.run, IMAGES.enemies.martialHero, 'run', 'Martial Hero');
         loadSpritesheetWithLogging(ASSETS.enemies.martialHero.attack, IMAGES.enemies.martialHero, 'attack', 'Martial Hero');
         loadSpritesheetWithLogging(ASSETS.enemies.martialHero.run_left, IMAGES.enemies.martialHero, 'run_left', 'Martial Hero');
@@ -472,7 +472,7 @@ async function loadAllAssets() {
         loadFoodSprite(ASSETS.food.sushi, IMAGES.food, 'sushi');
         loadFoodSprite(ASSETS.food.nigiri, IMAGES.food, 'nigiri');
         
-        console.log('Loading effect ');
+        console.log('Loading effects');
         loadImageOptionally(ASSETS.effects.shieldAura, IMAGES.effects, 'shieldAura');
         loadImageOptionally(ASSETS.effects.attackAura, IMAGES.effects, 'attackAura');
         
@@ -491,7 +491,7 @@ async function loadAllAssets() {
         }, 3000);
         
         IMAGES.loaded = true;
-        console.log(' Asset loading completed food');
+        console.log('Asset loading completed');
         
     } catch (error) {
         console.log('Some assets failed to load:', error);
@@ -515,17 +515,17 @@ function loadFoodSprite(src, targetObject, propertyName) {
     };
     
     img.onerror = function() {
-        console.log(`❌ FAILED to load food: ${propertyName} from ${src}`);
+        console.log(`FAILED to load food: ${propertyName} from ${src}`);
         targetObject[propertyName] = null;
     };
     
-    console.log(`🔄 Loading food: ${propertyName}: ${src}`);
+    console.log(`Loading food: ${propertyName}: ${src}`);
     img.src = src;
 }
 
 function loadSpritesheetWithLogging(src, targetObject, propertyName, enemyType) {
     if (!src) {
-        console.log(`⚠️ ${enemyType}.${propertyName}: No source path`);
+        console.log(`${enemyType}.${propertyName}: No source path`);
         targetObject[propertyName] = null;
         return;
     }
@@ -534,7 +534,7 @@ function loadSpritesheetWithLogging(src, targetObject, propertyName, enemyType) 
     
     img.onload = function() {
         targetObject[propertyName] = img;
-        console.log(`✅ ${enemyType} loaded: ${propertyName} (${img.width}x${img.height})`);
+        console.log(`${enemyType} loaded: ${propertyName} (${img.width}x${img.height})`);
         
         if (enemyType === 'Hero') {
             if (propertyName === 'attack_left' || propertyName === 'attack_right') {
@@ -549,67 +549,67 @@ function loadSpritesheetWithLogging(src, targetObject, propertyName, enemyType) 
         if (enemyType === 'Martial Hero') {
             if (propertyName === 'attack_left' || propertyName === 'attack_right') {
                 const frames = Math.round(img.width / img.height);
-                console.log(` Martial Hero Attack Direction: ${frames} frames (expected: 6)`);
+                console.log(`Martial Hero Attack Direction: ${frames} frames (expected: 6)`);
             } else if (propertyName === 'run_left' || propertyName === 'run_right') {
                 const frames = Math.round(img.width / img.height);
-                console.log(` Martial Hero Run Direction: ${frames} frames (expected: 8)`);
+                console.log(`Martial Hero Run Direction: ${frames} frames (expected: 8)`);
             }
         }
     };
     
     img.onerror = function() {
-        console.log(`❌ FAILED to load ${enemyType}.${propertyName} from ${src}`);
+        console.log(`FAILED to load ${enemyType}.${propertyName} from ${src}`);
         targetObject[propertyName] = null;
     };
     
-    console.log(`🔄 Loading ${enemyType}.${propertyName}: ${src}`);
+    console.log(`Loading ${enemyType}.${propertyName}: ${src}`);
     img.src = src;
 }
 
 function checkLoadingStatus() {
-    console.log('🔍 Checking loading status...');
+    console.log('Checking loading status...');
     
     const hero = IMAGES.enemies.hero;
     console.log('Hero status:');
-    console.log(`  run: ${hero.run ? '✅' : '❌'}`);
-    console.log(`  attack: ${hero.attack ? '✅' : '❌'}`);
-    console.log(`  run_left: ${hero.run_left ? '✅' : '❌'}`);
-    console.log(`  run_right: ${hero.run_right ? '✅' : '❌'}`);
-    console.log(`  attack_left: ${hero.attack_left ? '✅' : '❌'}`);
-    console.log(`  attack_right: ${hero.attack_right ? '✅' : '❌'}`);
+    console.log(`  run: ${hero.run ? 'YES' : 'NO'}`);
+    console.log(`  attack: ${hero.attack ? 'YES' : 'NO'}`);
+    console.log(`  run_left: ${hero.run_left ? 'YES' : 'NO'}`);
+    console.log(`  run_right: ${hero.run_right ? 'YES' : 'NO'}`);
+    console.log(`  attack_left: ${hero.attack_left ? 'YES' : 'NO'}`);
+    console.log(`  attack_right: ${hero.attack_right ? 'YES' : 'NO'}`);
     
     const martialHero = IMAGES.enemies.martialHero;
-    console.log(' Martial Hero status:');
-    console.log(`  run: ${martialHero.run ? '✅' : '❌'}`);
-    console.log(`  attack: ${martialHero.attack ? '✅' : '❌'}`);
-    console.log(`  run_left: ${martialHero.run_left ? '✅' : '❌'}`);
-    console.log(`  run_right: ${martialHero.run_right ? '✅' : '❌'}`);
-    console.log(`  attack_left: ${martialHero.attack_left ? '✅' : '❌'}`);
-    console.log(`  attack_right: ${martialHero.attack_right ? '✅' : '❌'}`);
+    console.log('Martial Hero status:');
+    console.log(`  run: ${martialHero.run ? 'YES' : 'NO'}`);
+    console.log(`  attack: ${martialHero.attack ? 'YES' : 'NO'}`);
+    console.log(`  run_left: ${martialHero.run_left ? 'YES' : 'NO'}`);
+    console.log(`  run_right: ${martialHero.run_right ? 'YES' : 'NO'}`);
+    console.log(`  attack_left: ${martialHero.attack_left ? 'YES' : 'NO'}`);
+    console.log(`  attack_right: ${martialHero.attack_right ? 'YES' : 'NO'}`);
     
     const food = IMAGES.food;
-    console.log('🍱 Food status:');
-    console.log(`  sushi: ${food.sushi ? '✅' : '❌'}`);
-    console.log(`  nigiri: ${food.nigiri ? '✅' : '❌'}`);
+    console.log('Food status:');
+    console.log(`  sushi: ${food.sushi ? 'YES' : 'NO'}`);
+    console.log(`  nigiri: ${food.nigiri ? 'YES' : 'NO'}`);
     
     const heroReady = hero.run && hero.attack && hero.run_left && hero.run_right && hero.attack_left && hero.attack_right;
     const martialReady = martialHero.run && martialHero.attack && martialHero.run_left && martialHero.run_right && martialHero.attack_left && martialHero.attack_right;
     const foodReady = food.sushi && food.nigiri;
     
-    console.log(`\n READINESS STATUS:`);
-    console.log(` Hero ready: ${heroReady ? '✅ YES' : '❌ NO'}`);
-    console.log(` Martial Hero ready: ${martialReady ? '✅ YES' : '❌ NO'}`);
-    console.log(`Food ready: ${foodReady ? '✅ YES' : '❌ NO'}`);
+    console.log(`\nREADINESS STATUS:`);
+    console.log(`Hero ready: ${heroReady ? 'YES' : 'NO'}`);
+    console.log(`Martial Hero ready: ${martialReady ? 'YES' : 'NO'}`);
+    console.log(`Food ready: ${foodReady ? 'YES' : 'NO'}`);
     
     if (heroReady && martialReady && foodReady) {
-        console.log(' All assets loaded success');
+        console.log('All assets loaded successfully');
     } else {
-        console.log('Some assets missing ');
+        console.log('Some assets missing');
     }
 }
 
 function initSoundEffects() {
-    console.log('Initializing sound ');
+    console.log('Initializing sound effects');
     
     try {
         if (!AUDIO.swordSlash) {
@@ -654,7 +654,7 @@ function initSoundEffects() {
             AUDIO.foodPickup.src = ASSETS.audio.foodPickup || '';
         }
         
-        console.log('Sound initialized');
+        console.log('Sound effects initialized');
         
     } catch (error) {
         console.log('Sound initialization error:', error);
@@ -665,10 +665,10 @@ function loadImageSilently(src, targetObject, propertyName) {
     const img = new Image();
     img.onload = function() {
         targetObject[propertyName] = img;
-        console.log('✅ Loaded:', propertyName);
+        console.log('Loaded:', propertyName);
     };
     img.onerror = function() {
-        console.log('❌ Failed to load:', propertyName);
+        console.log('Failed to load:', propertyName);
         targetObject[propertyName] = null;
     };
     img.src = src;
@@ -680,10 +680,10 @@ function loadImageOptionally(src, targetObject, propertyName) {
     const img = new Image();
     img.onload = function() {
         targetObject[propertyName] = img;
-        console.log('✅ Optional loaded:', propertyName);
+        console.log('Optional loaded:', propertyName);
     };
     img.onerror = function() {
-        console.log('ℹ️ Optional not found:', propertyName);
+        console.log('Optional not found:', propertyName);
         targetObject[propertyName] = null;
     };
     img.src = src;
@@ -693,21 +693,21 @@ function loadBackgroundSilently() {
     const img = new Image();
     img.onload = function() {
         IMAGES.background = img;
-        console.log('✅ Background loaded');
+        console.log('Background loaded');
         
         if (typeof gameRunning !== 'undefined' && !gameRunning && typeof drawStartScreen === 'function') {
             drawStartScreen();
         }
     };
     img.onerror = function() {
-        console.log('❌ Background failed to load, using fallback');
+        console.log('Background failed to load, using fallback');
     };
     img.src = ASSETS.background;
 }
 
 // DEBUG 
 function debugEnemySprites() {
-    console.log(' DEBUGGING ENEMY SPRITES:');
+    console.log('DEBUGGING ENEMY SPRITES:');
     
     Object.keys(IMAGES.enemies).forEach(enemyType => {
         console.log(`\n${enemyType.toUpperCase()}:`);
@@ -716,19 +716,19 @@ function debugEnemySprites() {
         Object.keys(enemySprites).forEach(spriteName => {
             const sprite = enemySprites[spriteName];
             if (sprite) {
-                const status = sprite.complete && sprite.naturalHeight > 0 ? '✅ READY' : '⏳ LOADING';
+                const status = sprite.complete && sprite.naturalHeight > 0 ? 'READY' : 'LOADING';
                 console.log(`  ${spriteName}: ${status} (${sprite.width}x${sprite.height})`);
                 
                 if (spriteName.includes('attack')) {
-                    console.log(`    ATTACK SPRITE: ${status === '✅ READY' ? 'ANIMATION READY' : 'NOT READY'}`);
+                    console.log(`    ATTACK SPRITE: ${status === 'READY' ? 'ANIMATION READY' : 'NOT READY'}`);
                 }
                 if (spriteName.includes('run')) {
-                    console.log(`    RUN SPRITE: ${status === '✅ READY' ? 'ANIMATION READY' : 'NOT READY'}`);
+                    console.log(`    RUN SPRITE: ${status === 'READY' ? 'ANIMATION READY' : 'NOT READY'}`);
                 }
             } else {
-                console.log(`  ${spriteName}:  NULL`);
+                console.log(`  ${spriteName}: NULL`);
                 if (spriteName.includes('attack')) {
-                    console.log(`     MISSING ATTACK SPRITE`);
+                    console.log(`    MISSING ATTACK SPRITE`);
                 }
             }
         });
@@ -736,9 +736,9 @@ function debugEnemySprites() {
 }
 
 function debugFoodSystem() {
-    console.log('🍱 FOOD SYSTEM DEBUG:');
-    console.log(`  Sushi sprite: ${IMAGES.food.sushi ? '✅ LOADED' : '❌ MISSING'}`);
-    console.log(`  Nigiri sprite: ${IMAGES.food.nigiri ? '✅ LOADED' : '❌ MISSING'}`);
+    console.log('FOOD SYSTEM DEBUG:');
+    console.log(`  Sushi sprite: ${IMAGES.food.sushi ? 'LOADED' : 'MISSING'}`);
+    console.log(`  Nigiri sprite: ${IMAGES.food.nigiri ? 'LOADED' : 'MISSING'}`);
     
     if (typeof CONFIG !== 'undefined' && CONFIG.food) {
         console.log(`  Sushi drop chance: ${(CONFIG.food.sushi.dropChance * 100)}%`);
@@ -767,4 +767,3 @@ function debugFoodSystem() {
 window.debugEnemySprites = debugEnemySprites;
 window.debugFoodSystem = debugFoodSystem;
 window.checkLoadingStatus = checkLoadingStatus;
-
