@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Senshi Saga </title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&family=Cinzel:wght@400;600;900&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+   
+    <div id="loading-screen" class="loading-screen">
+        <div class="loading-content">
+            <h1 class="loading-title">Senshi Saga</h1>
+            <div class="loading-spinner"></div>
+            <p class="loading-text">Loading..</p>
+        </div>
+    </div>
+
+    
+    <h1 class="game-title">Senshi Saga</h1>
+    
+    
+    
+    <div class="game-container">
+        <canvas id="gameCanvas" width="900" height="500"></canvas>
+        
+        
+        <div class="game-over-screen" id="gameOverScreen">
+            <div class="game-over-title">YOU LOSE</div>
+            <div class="final-stats">
+                <div>Waves Survived: <span class="stat-highlight" id="finalWave">0</span></div>
+                <div>Heroes Killed: <span class="stat-highlight" id="finalHeroes">0</span></div>
+                <div>IRYS Collected: <span class="stat-highlight" id="finalIrys">0</span></div>
+                <div class="final-score">Final Score: <span id="finalScore">0</span></div>
+            </div>
+            <button class="restart-btn" onclick="restartGameSafe()">FIGHT AGAIN</button>
+        </div>
+    </div>
+
+    
+    <div class="ui-panel">
+        <div class="stat-item">
+            <div class="stat-value" id="playerHealth">100</div>
+            <div class="stat-label">Health</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-value" id="currentWave">1</div>
+            <div class="stat-label">Wave</div>
+        </div>
+        <div class="stat-item" id="heroCounterContainer">
+            <div class="stat-value" id="heroKilled">0</div>
+            <div class="stat-label">Heroes</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-value" id="irysCount">0</div>
+            <div class="stat-label">IRYS</div>
+        </div>
+        
+    </div>
+
+    
+    <div class="controls">
+        
+        <button class="start-btn" onclick="startGameSafe()" id="startBtn">
+            START GAME
+        </button>
+        
+       
+        <div class="menu-buttons">
+            <button class="game-btn" onclick="toggleAudioSafe()" id="audioBtn">🔊 Audio</button>
+        </div>
+    </div>
+
+    
+    <div class="developer-credit">
+        By WestSide
+    </div>
+
+    
+    <script src="js/config.js"></script>
+    <script src="js/classes.js"></script>
+    <script src="js/shield_aura_system.js"></script>
+    <script src="js/attack_aura_system.js"></script>
+    <script src="js/AnimatedSlashEffect.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/game.js"></script>
+    
+    <script>
+        function hideLoadingScreen() {
+            const loadingScreen = document.getElementById('loading-screen');
+            if (loadingScreen) {
+                loadingScreen.style.opacity = '0';
+                setTimeout(() => {
+                    loadingScreen.style.display = 'none';
+                }, 500);
+            }
+        }
+
+        
+        function updateUI() {
+            const playerHealthEl = document.getElementById('playerHealth');
+            const currentWaveEl = document.getElementById('currentWave');
+            const heroKilledEl = document.getElementById('heroKilled');
+            const irysCountEl = document.getElementById('irysCount');
+            
+            if (playerHealthEl && typeof player !== 'undefined') {
+                playerHealthEl.textContent = player.health;
+            }
+            if (currentWaveEl && typeof currentWave !== 'undefined') {
+                currentWaveEl.textContent = currentWave;
+            }
+            if (heroKilledEl && typeof heroKilled !== 'undefined') {
+                heroKilledEl.textContent = heroKilled;
+            }
+            if (irysCountEl) {
+                const currentIrys = (typeof irysCollected !== 'undefined') ? irysCollected : (window.irysCollected || 0);
+                irysCountEl.textContent = currentIrys;
+            }
+            
+            
+            
+            updateHeroUI();
+        }
+
+        function updateHeroUI() {
+            const heroContainer = document.getElementById('heroCounterContainer');
+            
+            if (heroContainer) {
+                heroContainer.classList.remove('shield-active-indicator', 'attack-active-indicator', 'dual-aura-active');
+                
+                const shieldActive = typeof player !== 'undefined' && player.buffs && player.buffs.shield && player.buffs.shield.active;
+                const attackActive = typeof player !== 'undefined' && player.buffs && player.buffs.attack && player.buffs.attack.active;
+                
+                if (shieldActive && attackActive) {
+                    heroContainer.classList.add('dual-aura-active');
+                } else if (shieldActive) {
+                    heroContainer.classList.add('shield-active-indicator');
+                } else if (attackActive) {
+                    heroContainer.classList.add('attack-active-indicator');
+                }
+            }
+        }
+
+        
+        function updateFinalStats() {
+            const finalWaveEl = document.getElementById('finalWave');
+            const finalHeroesEl = document.getElementById('finalHeroes');
+            const finalIrysEl = document.getElementById('finalIrys');
+            const finalScoreEl = document.getElementById('finalScore');
+            
+            if (finalWaveEl && typeof currentWave !== 'undefined') {
+                finalWaveEl.textContent = currentWave;
+            }
+            if (finalHeroesEl && typeof heroKilled !== 'undefined') {
+                finalHeroesEl.textContent = heroKilled;
+            }
+            if (finalIrysEl) {
+                finalIrysEl.textContent = (typeof irysCollected !== 'undefined') ? irysCollected : (window.irysCollected || 0);
+            }
+            if (finalScoreEl) {
+                const finalIrys = (typeof irysCollected !== 'undefined') ? irysCollected : (window.irysCollected || 0);
+                const score = (typeof honorPoints !== 'undefined' ? honorPoints : 0) + 
+                            (finalIrys * 50) + 
+                            (typeof currentWave !== 'undefined' ? currentWave * 500 : 0);
+                finalScoreEl.textContent = score;
+            }
+        }
+
+        function playEnhancedFeedback(eventType) {
+            updateUI();
+            console.log(`Enhanced feedback: ${eventType}`);
+        }
+
+        function collectIrys(amount = 1) {
+            console.log(`CollectIrys called from HTML: +${amount}`);
+        }
+
+        function startGameSafe() {
+            try {
+                if (typeof startGame === 'function') {
+                    const startBtn = document.getElementById('startBtn');
+                    if (startBtn) {
+                        startBtn.style.display = 'none';
+                    }
+                    startGame();
+                } else {
+                    console.log('startGame not found');
+                }
+            } catch (error) {
+                console.log(' Error starting game:', error);
+            }
+        }
+
+        function restartGameSafe() {
+            try {
+                if (typeof restartGame === 'function') {
+                    const startBtn = document.getElementById('startBtn');
+                    if (startBtn) {
+                        startBtn.style.display = 'inline-block';
+                    }
+                    restartGame();
+                } else {
+                    console.log(' restartGame function not found');
+                }
+            } catch (error) {
+                console.log(' Error restarting game:', error);
+            }
+        }
+
+        function toggleAudioSafe() {
+            try {
+                if (typeof toggleAudio === 'function') {
+                    toggleAudio();
+                } else {
+                    console.log(' toggleAudio function not found');
+                }
+            } catch (error) {
+                console.log('Error toggling audio:', error);
+            }
+        }
+
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            try {
+                
+                setTimeout(() => {
+                    if (typeof initShieldAuraSystem === 'function') {
+                        initShieldAuraSystem();
+                        console.log('Shield aura initialized');
+                    }
+                }, 500);
+                
+                setTimeout(() => {
+                    if (typeof initAttackAuraSystem === 'function') {
+                        initAttackAuraSystem();
+                        console.log('Attack aura  initialized');
+                    }
+                }, 700);
+                
+                setTimeout(() => {
+                    if (typeof initSlashAnimationSystem === 'function') {
+                        initSlashAnimationSystem();
+                        console.log(' Slash animation initialized');
+                    }
+                }, 900);
+                
+                setTimeout(() => {
+                    hideLoadingScreen();
+                    
+                }, 2000);
+
+            } catch (error) {
+                console.log('Error during initialization:', error);
+                setTimeout(hideLoadingScreen, 3000);
+            }
+        });
+
+        window.enhancedGameFunctions = {
+            updateUI: updateUI,
+            updateHeroUI: updateHeroUI,
+            updateFinalStats: updateFinalStats,
+            playEnhancedFeedback: playEnhancedFeedback,
+            collectIrys: collectIrys,
+            hideLoadingScreen: hideLoadingScreen
+        };
+
+    </script>
+</body>
+</html>
