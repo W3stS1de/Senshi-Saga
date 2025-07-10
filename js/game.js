@@ -82,17 +82,17 @@ let previousAttackState = false;
 function alignPlayerToGround() {
     if (typeof CONFIG !== 'undefined' && CONFIG.ground && CONFIG.player) {
         player.y = CONFIG.ground.y - player.height - CONFIG.player.groundOffset;
-        console.log(`Player aligned: y=${player.y}`);
+        console.log(`🎯 Player aligned: y=${player.y}`);
     }
 }
 
 // Audio 
 function initGameAudio() {
     try {
-        console.log('Initializing audio...');
+        console.log('🎵 Initializing audio...');
 
         if (typeof ASSETS === 'undefined' || !ASSETS.audio) {
-            console.log('ASSETS not defined, skipping audio init');
+            console.log('⚠️ ASSETS not defined, skipping audio init');
             return;
         }
 
@@ -120,7 +120,7 @@ function initGameAudio() {
         }
 
     } catch (error) {
-        console.log('Audio init error:', error);
+        console.log('❌ Audio init error:', error);
     }
 }
 
@@ -133,7 +133,7 @@ function playBackgroundMusic() {
             currentTrack.play().catch(e => console.log('Auto-play blocked'));
             
             currentTrack.addEventListener('ended', () => {
-                console.log('Track ended, switching to next...');
+                console.log('🎵 Track ended, switching to next...');
                 AUDIO.currentTrackIndex = ((AUDIO.currentTrackIndex || 0) + 1) % AUDIO.musicTracks.length;
                 setTimeout(() => {
                     playBackgroundMusic();
@@ -159,14 +159,14 @@ function playSound(soundName) {
         if (AUDIO[soundName] && typeof AUDIO[soundName].play === 'function') {
             AUDIO[soundName].currentTime = 0;
             AUDIO[soundName].play().catch((error) => {
-                console.log(`Could not play ${soundName}:`, error.message);
+                console.log(`⚠️ Could not play ${soundName}:`, error.message);
             });
-            console.log(`Playing sound: ${soundName}`);
+            console.log(`🔊 Playing sound: ${soundName}`);
         } else {
-            console.log(`Sound ${soundName} not found or not loaded`);
+            console.log(`❌ Sound ${soundName} not found or not loaded`);
         }
     } catch (error) {
-        console.log(`Error playing ${soundName}:`, error);
+        console.log(`❌ Error playing ${soundName}:`, error);
     }
 }
 
@@ -238,13 +238,13 @@ function updatePlayer() {
     // Shield buff 
     if (player.buffs.shield.active) {
         if (!previousShieldState) {
-            console.log('Shield aura activated - playing buff sound');
+            console.log('🛡️ Shield aura activated - playing buff sound');
             playSound('buffActivate');
             previousShieldState = true;
             
             if (player.shieldAura && !player.shieldAura.isActive()) {
                 player.shieldAura.activate();
-                console.log('Shield aura activated in updatePlayer');
+                console.log('🛡️ Shield aura activated in updatePlayer');
             }
         }
 
@@ -255,7 +255,7 @@ function updatePlayer() {
             
             if (player.shieldAura && player.shieldAura.isActive()) {
                 player.shieldAura.deactivate();
-                console.log('Shield aura deactivated - buff expired');
+                console.log('🛡️ Shield aura deactivated - buff expired');
             }
         }
     } else {
@@ -265,13 +265,13 @@ function updatePlayer() {
     // Attack buff 
     if (player.buffs.attack.active) {
         if (!previousAttackState) {
-            console.log('Attack aura activated - playing buff sound');
+            console.log('⚔️ Attack aura activated - playing buff sound');
             playSound('buffActivate');
             previousAttackState = true;
             
             if (player.attackAura && !player.attackAura.isActive()) {
                 player.attackAura.activate();
-                console.log('Attack aura activated in updatePlayer');
+                console.log('⚔️ Attack aura activated in updatePlayer');
             }
         }
 
@@ -282,7 +282,7 @@ function updatePlayer() {
             
             if (player.attackAura && player.attackAura.isActive()) {
                 player.attackAura.deactivate();
-                console.log('Attack aura deactivated - buff expired');
+                console.log('⚔️ Attack aura deactivated - buff expired');
             }
         }
     } else {
@@ -318,7 +318,7 @@ function performAttack() {
             player.facing,
             attackRange
         ));
-        console.log('AnimatedSlashEffect created');
+        console.log('🗡️ AnimatedSlashEffect created');
     }
 
     playSound('swordSlash');
@@ -357,14 +357,14 @@ function performAttack() {
                 damage *= CONFIG.combat.criticalMultiplier;
             }
             
-            console.log(`HIT! Distance: ${Math.round(distance)}, Range: ${Math.round(effectiveAttackRange)}, Damage: ${damage}`);
+            console.log(`🎯 HIT! Distance: ${Math.round(distance)}, Range: ${Math.round(effectiveAttackRange)}, Damage: ${damage}`);
             
             if (enemy.takeDamage && enemy.takeDamage(damage)) {
                 enemies.splice(enemies.indexOf(enemy), 1);
                 handleEnemyKill(enemy, isCritical);
             }
         } else {
-            console.log(`MISS! Distance: ${Math.round(distance)}, Range: ${Math.round(effectiveAttackRange)}`);
+            console.log(`❌ MISS! Distance: ${Math.round(distance)}, Range: ${Math.round(effectiveAttackRange)}`);
         }
     });
 }
@@ -378,7 +378,7 @@ function handleEnemyKill(enemy, isCritical) {
 
     if (enemy.type === 'hero') {
         heroKilled++;
-        console.log(`Hero killed! Total: ${heroKilled}`);
+        console.log(`🦸 Hero killed! Total: ${heroKilled}`);
 
         if (typeof window.enhancedGameFunctions !== 'undefined' && window.enhancedGameFunctions.playEnhancedFeedback) {
             window.enhancedGameFunctions.playEnhancedFeedback('heroKilled');
@@ -386,7 +386,7 @@ function handleEnemyKill(enemy, isCritical) {
 
         const bossKills = typeof CONFIG !== 'undefined' ? CONFIG.waves.bossSystem.heroKillsForBoss : 10;
         if (heroKilled % bossKills === 0) {
-            console.log(`Boss condition met! Heroes: ${heroKilled}`);
+            console.log(`🚨 Boss condition met! Heroes: ${heroKilled}`);
         }
     }
 
@@ -427,7 +427,7 @@ function handleEnemyKill(enemy, isCritical) {
                 foodDrops.push(new FoodDrop(foodPos.x, foodPos.y, 'sushi', enemyCenterX, enemyCenterY));
                 foodDropped = true;
                 const healAmount = typeof CONFIG !== 'undefined' && CONFIG.food ? CONFIG.food.sushi.healAmount : 25;
-                console.log(`Sushi dropped from hero (+${healAmount} HP healing)`);
+                console.log(`🍱 Sushi dropped from hero (+${healAmount} HP healing)`);
             }
         }
     } else if (enemy.type === 'martialHero') {
@@ -438,7 +438,7 @@ function handleEnemyKill(enemy, isCritical) {
                 foodDrops.push(new FoodDrop(foodPos.x, foodPos.y, 'nigiri', enemyCenterX, enemyCenterY));
                 foodDropped = true;
                 const healAmount = typeof CONFIG !== 'undefined' && CONFIG.food ? CONFIG.food.nigiri.healAmount : 50;
-                console.log(`Nigiri dropped from martial hero (+${healAmount} HP healing)`);
+                console.log(`🍱 Nigiri dropped from martial hero (+${healAmount} HP healing)`);
             }
         }
     }
@@ -512,7 +512,7 @@ function handleEnemyKill(enemy, isCritical) {
             }
         }
 
-        console.log(`IRYS created: ${totalIrysValue} (base: ${baseIrysValue}, bonus: ${bonusIrysValue}, rare: ${isRareIrys})`);
+        console.log(`💎 IRYS created: ${totalIrysValue} (base: ${baseIrysValue}, bonus: ${bonusIrysValue}, rare: ${isRareIrys})`);
     }
 
     // Sakura 
@@ -598,7 +598,7 @@ function checkCollisions() {
         if (enemy.canDamagePlayer && player.invulnerable === 0) {
             
             if (player.buffs.shield.active) {
-                console.log('Attack blocked by shield!');
+                console.log('🛡️ Attack blocked by shield!');
                 enemy.canDamagePlayer = false;
                 return;
             }
@@ -609,7 +609,7 @@ function checkCollisions() {
             
             playSound('playerHit');
             
-            console.log(`Player took ${enemy.damage || 25} damage`);
+            console.log(` Player took ${enemy.damage || 25} damage`);
             
             if (typeof BloodParticle !== 'undefined') {
                 for (let i = 0; i < 10; i++) {
@@ -632,7 +632,7 @@ function checkCollisions() {
             irysCollected += irysText.value;
             window.irysCollected = irysCollected;
             
-            console.log(`IRYS collected: +${irysText.value}, Total: ${irysCollected}`);
+            console.log(` IRYS collected: +${irysText.value}, Total: ${irysCollected}`);
             
             const irysCountEl = document.getElementById('irysCount');
             if (irysCountEl) {
@@ -676,7 +676,7 @@ function checkCollisions() {
                 }
             }
             
-            console.log(`Food collected: ${food.type} (+${actualHealing} HP healing, Health: ${player.health}/${player.maxHealth})`);
+            console.log(` Food collected: ${food.type} (+${actualHealing} HP healing, Health: ${player.health}/${player.maxHealth})`);
             
             updateUI();
             return false;
@@ -706,13 +706,13 @@ function checkCollisions() {
             } else if (sphere.type === 'attack') {
                 player.buffs.attack.active = true;
                 player.buffs.attack.timer = typeof CONFIG !== 'undefined' ? CONFIG.player.buffs.attack.duration : 240;
-                console.log('Attack boost activated!');
+                console.log(' Attack boost activated!');
                 
                 if (player.attackAura) {
                     player.attackAura.activate();
                     console.log('Attack aura manually activated on sphere pickup');
                 } else {
-                    console.log('Attack aura not found on player');
+                    console.log(' Attack aura not found on player');
                 }
                 
                 if (typeof window.enhancedGameFunctions !== 'undefined' && window.enhancedGameFunctions.playEnhancedFeedback) {
@@ -740,7 +740,7 @@ function spawnEnemy() {
         enemies.push(enemy);
         enemiesLeft--;
 
-        console.log(`Spawned ${type} from ${side} side, enemies left: ${enemiesLeft}`);
+        console.log(` Spawned ${type} from ${side} side, enemies left: ${enemiesLeft}`);
     }
 }
 
@@ -767,7 +767,7 @@ function nextWave() {
 
     player.health = Math.min(player.health + 25, player.maxHealth);
 
-    console.log(`Wave ${currentWave} started! Enemies: ${enemiesInWave}`);
+    console.log(` Wave ${currentWave} started! Enemies: ${enemiesInWave}`);
 }
 
 
@@ -791,7 +791,7 @@ function updateGame() {
                 enemy.update();
             }
         } catch (error) {
-            console.log(`Error updating enemy ${index}:`, error);
+            console.log(`❌ Error updating enemy ${index}:`, error);
             enemies.splice(index, 1);
         }
     });
@@ -852,7 +852,7 @@ function updateGame() {
             }
             return false;
         } catch (error) {
-            console.log('Error updating slash effect:', error);
+            console.log('❌ Error updating slash effect:', error);
             return false;
         }
     });
@@ -960,7 +960,7 @@ function drawGame() {
                     enemy.draw();
                 }
             } catch (error) {
-                console.log(`Error drawing enemy ${index}:`, error);
+                console.log(`❌ Error drawing enemy ${index}:`, error);
             }
         });
 
@@ -981,7 +981,7 @@ function drawGame() {
                 if (effect && typeof effect.draw === 'function') {
                     effect.draw(); 
                 }
-            } catch (e) { console.log('Slash draw error:', e); }
+            } catch (e) { console.log('❌ Slash draw error:', e); }
         });
 
         particles.forEach(particle => {
@@ -1027,7 +1027,7 @@ function drawGame() {
         });
 
     } catch (error) {
-        console.log('Draw error:', error);
+        console.log('❌ Draw error:', error);
     }
 }
 
@@ -1039,7 +1039,7 @@ function gameLoop() {
         updateGame();
         drawGame();
     } catch (error) {
-        console.log('Game loop error:', error);
+        console.log('❌ Game loop error:', error);
     }
 
     requestAnimationFrame(gameLoop);
@@ -1047,7 +1047,7 @@ function gameLoop() {
 
 // Start game 
 function startGame() {
-    console.log('Starting game...');
+    console.log('🎮 Starting game...');
 
     if (!audioEnabled) {
         audioEnabled = true;
@@ -1106,7 +1106,7 @@ function startGame() {
 
     gameLoop();
 
-    console.log('Game started');
+    console.log(' Game started ');
 }
 
 function endGame() {
@@ -1167,7 +1167,7 @@ function startGameSafe() {
     try {
         startGame();
     } catch (error) {
-        console.log('Error starting game:', error);
+        console.log('❌ Error starting game:', error);
     }
 }
 
@@ -1175,7 +1175,7 @@ function restartGameSafe() {
     try {
         restartGame();
     } catch (error) {
-        console.log('Error restarting game:', error);
+        console.log('❌ Error restarting game:', error);
     }
 }
 
@@ -1183,7 +1183,7 @@ function toggleAudioSafe() {
     try {
         toggleAudio();
     } catch (error) {
-        console.log('Error toggling audio:', error);
+        console.log('❌ Error toggling audio:', error);
     }
 }
 
@@ -1226,7 +1226,7 @@ document.addEventListener('click', () => {
     if (!audioEnabled) {
         audioEnabled = true;
         if (typeof AUDIO !== 'undefined') AUDIO.enabled = true;
-        console.log('Audio enabled by user interaction');
+        console.log(' Audio enabled by user interaction');
 
         if (gameRunning && typeof AUDIO !== 'undefined' && AUDIO.musicTracks && AUDIO.musicTracks.length > 0) {
             playBackgroundMusic();
@@ -1239,21 +1239,21 @@ function initGame() {
 
     if (typeof initShieldAuraSystem === 'function') {
         initShieldAuraSystem();
-        console.log('Shield aura initialized');
+        console.log('Shield aura initialized ');
     } else {
         console.log('Shield aura not found');
     }
 
     if (typeof initAttackAuraSystem === 'function') {
         initAttackAuraSystem();
-        console.log('Attack aura initialized');
+        console.log('Attack aura  initialized ');
     } else {
         console.log('Attack aura not found');
     }
 
     if (typeof initSlashAnimationSystem === 'function') {
         initSlashAnimationSystem();
-        console.log('Slash animation initialized');
+        console.log(' Slash animation initialized');
     } else {
         console.log('Slash animation not found');
     }
@@ -1266,7 +1266,7 @@ function initGame() {
 
     updateUI();
 
-    console.log('Game initialized');
+    console.log('✅ Game initialized');
 }
 
 // Export functions
@@ -1293,7 +1293,7 @@ window.spawnTestHero = function() {
         enemies.push(hero);
         console.log('Test Hero spawned');
     } else {
-        console.log('Game not running');
+        console.log('Game not running ');
     }
 };
 
@@ -1301,7 +1301,7 @@ window.spawnTestMartialHero = function() {
     if (gameRunning && typeof Enemy !== 'undefined') {
         const boss = new Enemy('martialHero', canvas.width / 2);
         enemies.push(boss);
-        console.log('Test Martial Hero spawned');
+        console.log(' Test Martial Hero spawned');
     } else {
         console.log('Game not running');
     }
@@ -1311,7 +1311,7 @@ window.testShieldAura = function() {
     if (player.shieldAura) {
         player.buffs.shield.active = true;
         player.buffs.shield.timer = 300;
-        console.log('Testing shield aura manually');
+        console.log('🧪 Testing shield aura manually');
 
         setTimeout(() => {
             player.buffs.shield.active = false;
@@ -1332,7 +1332,7 @@ window.testAttackAura = function() {
         setTimeout(() => {
             player.buffs.attack.active = false;
             player.buffs.attack.timer = 0;
-            console.log('Attack aura test completed');
+            console.log(' Attack aura test completed');
         }, 3000);
     } else {
         console.log('Attack aura not initialized');
@@ -1355,7 +1355,7 @@ window.testSlashEffect = function() {
 
         console.log('Test animated slash effect created');
     } else {
-        console.log('Game not running or AnimatedSlashEffect not available');
+        console.log(' Game not running not available');
     }
 };
 
@@ -1367,9 +1367,9 @@ window.spawnTestFood = function() {
         foodDrops.push(new FoodDrop(playerX - 60, playerY, 'sushi', playerX - 60, playerY));
         foodDrops.push(new FoodDrop(playerX + 60, playerY, 'nigiri', playerX + 60, playerY));
 
-        console.log('Test food spawned - sushi and nigiri');
+        console.log(' Test food spawned sushi');
     } else {
-        console.log('Game not running or FoodDrop class not defined');
+        console.log('FoodDrop class not defined');
     }
 };
 
@@ -1381,9 +1381,9 @@ window.testHealthText = function() {
         floatingHealthTexts.push(new FloatingHealthText(playerX - 30, playerY - 20, 25));
         floatingHealthTexts.push(new FloatingHealthText(playerX + 30, playerY - 20, 50));
 
-        console.log('Test floating health text created');
+        console.log(' Test floating health created)');
     } else {
-        console.log('Game not running or FloatingHealthText class not defined');
+        console.log(' Game not FloatingHealthText class not defined');
     }
 };
 
@@ -1396,7 +1396,7 @@ window.damagePlayer = function(amount = 30) {
         console.log(`Player damaged: -${actualDamage} HP (Health: ${player.health}/${player.maxHealth})`);
 
         if (player.health === 0) {
-            console.log('Player health critical - collect food to heal!');
+            console.log(' Player health  collect food to heal!');
         }
 
         updateUI();
@@ -1406,7 +1406,7 @@ window.damagePlayer = function(amount = 30) {
 };
 
 window.debugFoodHealing = function() {
-    console.log('BALANCED FOOD HEALING SYSTEM DEBUG:');
+    console.log('ALANCED FOOD HEALING SYSTEM DEBUG:');
 
     if (typeof CONFIG !== 'undefined' && CONFIG.food) {
         console.log(`  Sushi healing: ${CONFIG.food.sushi.healAmount} HP (Drop chance: ${CONFIG.food.sushi.dropChance * 100}%)`);
@@ -1423,7 +1423,7 @@ window.debugFoodHealing = function() {
         console.log(`  Active food drops: ${foodDrops.length}`);
 
         if (foodDrops.length > 0) {
-            console.log('ACTIVE HEALING FOOD:');
+            console.log('\nACTIVE HEALING FOOD:');
             foodDrops.forEach((food, index) => {
                 console.log(`  ${index}: ${food.type} (+${food.healAmount} HP), Life: ${food.life}, Size: ${food.width}x${food.height}`);
             });
@@ -1444,9 +1444,9 @@ window.spawnMoreSakura = function() {
                 false
             ));
         }
-        console.log('Extra sakura particles spawned (30 petals)');
+        console.log('🌸 Extra sakura particles spawned (30 petals)');
     } else {
-        console.log('Game not running or SakuraParticle class not defined');
+        console.log('⚠️ Game not running or SakuraParticle class not defined');
     }
 };
 
@@ -1458,9 +1458,9 @@ window.spawnColoredSpheres = function() {
         powerSpheres.push(new EnhancedPowerSphere(playerX - 50, playerY - 30, 'shield'));
         powerSpheres.push(new EnhancedPowerSphere(playerX + 50, playerY - 30, 'attack'));
 
-        console.log('Spawned colored spheres');
+        console.log('💜 Spawned colored spheres');
     } else {
-        console.log('Enhanced spheres not available or game not running');
+        console.log('⚠️ Enhanced spheres not available or game not running');
     }
 };
 
