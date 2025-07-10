@@ -1,5 +1,3 @@
-
-
 const SLASH_ANIMATION_CONFIG = {
     frameCount: 6,           
     frameDuration: 3,        
@@ -31,7 +29,7 @@ class SlashSpriteLoader {
     }
     
     loadSlashSprites() {
-        console.log('🗡️ Loading slash animation sprites...');
+        console.log(' Loading slash animation sprites...');
         
         let loadedCount = 0;
         let failedCount = 0;
@@ -46,17 +44,17 @@ class SlashSpriteLoader {
                 loadedCount++;
                 this.loadingProgress = loadedCount / this.totalFrames;
                 
-                console.log(`✅ Slash frame ${index + 1} loaded (${img.width}x${img.height})`);
+                console.log(`Slash frame ${index + 1} loaded (${img.width}x${img.height})`);
                 
                 if (loadedCount === this.totalFrames) {
                     this.loaded = true;
                     this.fallbackMode = false;
-                    console.log('🎉 All slash animation frames loaded!');
+                    console.log(' All slash animation frames loaded!');
                 }
             };
             
             img.onerror = () => {
-                console.log(`❌ Failed to load slash frame ${index + 1}: ${framePath}`);
+                console.log(`Failed to load slash frame ${index + 1}: ${framePath}`);
                 failedCount++;
                 
                 // fallback спрайт
@@ -67,14 +65,14 @@ class SlashSpriteLoader {
                 if (loadedCount === this.totalFrames) {
                     this.loaded = true;
                     this.fallbackMode = failedCount > 0;
-                    console.log(`⚠️ Slash animation loaded with ${failedCount} fallback frames`);
+                    console.log(` Slash animation loaded with ${failedCount} fallback frames`);
                 }
             };
             
             
             setTimeout(() => {
                 if (!img.complete) {
-                    console.log(`⏰ Timeout loading frame ${index + 1}, using fallback`);
+                    console.log(`Timeout loading frame ${index + 1}, using fallback`);
                     img.onerror();
                 }
             }, 2000); // 2 сек таймаут
@@ -85,7 +83,7 @@ class SlashSpriteLoader {
         
         setTimeout(() => {
             if (!this.loaded) {
-                console.log('🚨 Force enabling slash system with fallbacks');
+                console.log('Force enabling slash system with fallbacks');
                 this.loaded = true;
                 this.fallbackMode = true;
                 
@@ -169,7 +167,7 @@ let slashSpriteLoader = null;
 function initSlashSpriteLoader() {
     if (!slashSpriteLoader) {
         slashSpriteLoader = new SlashSpriteLoader();
-        console.log('🗡️ Slash sprite loader initialized');
+        console.log('Slash loader initialized');
     }
     return slashSpriteLoader;
 }
@@ -201,7 +199,7 @@ class AnimatedSlashEffect {
             initSlashSpriteLoader();
         }
         
-        console.log(`🗡️ AnimatedSlashEffect created: direction=${direction}, frames=6, loader=${slashSpriteLoader ? 'ready' : 'missing'}`);
+        console.log(`AnimatedSlashEffect created: direction=${direction}, frames=6, loader=${slashSpriteLoader ? 'ready' : 'missing'}`);
     }
     
     update() {
@@ -406,7 +404,7 @@ window.createTestSlash = function() {
         100 // range
     );
     
-    console.log('🧪 Test slash created:', testSlash.getFrameInfo());
+    console.log(' Test slash created:', testSlash.getFrameInfo());
     return testSlash;
 };
 
