@@ -82,7 +82,7 @@ const CONFIG = {
         hero: { 
             health: 120, 
             speed: 2.2,
-            damage: 12, 
+            damage: 15, 
             color: '#FF6B35', 
             reward: 20,
             width: 320,
@@ -101,7 +101,7 @@ const CONFIG = {
         martialHero: { 
             health: 250, 
             speed: 1.8,
-            damage: 23, 
+            damage: 30, 
             color: '#4B0082', 
             reward: 50,
             width: 320,
